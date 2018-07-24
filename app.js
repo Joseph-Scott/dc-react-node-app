@@ -6,6 +6,7 @@ const logger = require('morgan');
 const dotenv = require('dotenv');
 
 const apiRouter = require('./routes/api');
+const setupAuth = require('./auth');
 
 dotenv.load();
 
@@ -20,6 +21,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/build')));
+
+
+
+setupAuth(app);
 
 app.use('/api', apiRouter);
 
