@@ -10,7 +10,8 @@ class Login extends Component {
         this.logout = this.logout.bind(this);
 
         this.state = {
-            user: null
+            user: null,
+            signupFormVisible: false,
         };
     }
 
@@ -23,21 +24,72 @@ class Login extends Component {
                     <button onClick={this.logout}>Log Out</button>
                 </div>
             ) : (
-                <form onSubmit={this.login}>
-                    <div className="form-field">
-                        <label htmlFor="username">Username:</label>
-                        <input name="username" type="text" />
-                    </div>
-                    <div className="form-field">
-                        <label htmlFor="password">Password:</label>
-                        <input name="password" type="password" />
-                    </div>
-                    <button type="submit">Login</button>
-                </form>
+                <div className="user-form">
+                    <button onClick={this.showSignupForm} disabled={this.state.signupFormVisible}>Register</button>
+                    <button onClick={this.showLoginForm} disabled={!this.state.signupFormVisible}>Login</button>
+                    {this.state.signupFormVisible ? (
+                        <form id="registerForm" onSubmit={this.register}>
+                            <h2>Register</h2>
+                            <div className="form-field">
+                                <label htmlFor="registerUsername">Username:</label>
+                                <input name="registerUsername" type="text" required />
+                            </div>
+                            <div className="form-field">
+                                <label htmlFor="registerPassword">Password:</label>
+                                <input name="registerPassword" type="password" required />
+                            </div>
+                            <button type="submit">Register</button>
+                        </form>
+                    ) : (
+                        <form id="loginForm" onSubmit={this.login}>
+                            <h2>Login</h2>
+                            <div className="form-field">
+                                <label htmlFor="username">Username:</label>
+                                <input name="username" type="text" required />
+                            </div>
+                            <div className="form-field">
+                                <label htmlFor="password">Password:</label>
+                                <input name="password" type="password" required />
+                            </div>
+                            <button type="submit">Login</button>
+                        </form>
+                    )}
+                </div>
             )
             }
         </div>
         );
+    }
+
+    showLoginForm = (event) => {
+        this.setState({
+            signupFormVisible: false,
+        })
+    }
+
+    showSignupForm = (event) => {
+        this.setState({
+            signupFormVisible: true,
+        })
+    }
+
+    register = (event) => {
+        event.preventDefault();
+        axios({
+            method: 'post',
+            url: '/auth/signup',
+            data: {
+                username: event.target.registerUsername.value,
+                password: event.target.registerPassword.value,
+            }
+        })
+            .then((res) => {
+                this.showLoginForm();
+                console.log(res);
+            })
+            .catch((res) => {
+                console.log(res);
+            });
     }
 
     login = (event) => {
@@ -53,6 +105,7 @@ class Login extends Component {
         .then((res) => {
             this.setState({
                 user: res.data.user,
+                showSignupForm: false,
             })
             console.log(res);
         })
@@ -63,7 +116,7 @@ class Login extends Component {
 
     logout = () => {
         axios({
-            method: 'post',
+            method: 'get',
             url: '/auth/logout'
         })
         .then(() => {
