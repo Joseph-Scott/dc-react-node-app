@@ -50,5 +50,4 @@ router.get('/weather/:zip', (req, res, next) => {
     });
 })
 
-
 module.exports = router;
