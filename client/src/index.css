@@ -8,3 +8,47 @@ button[disabled] {
   color: grey;
   cursor: not-allowed;
 }
+
+.App-header {
+  height: 100vh;
+}
+
+.tiles {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.tile {
+  width: 100%;
+  display: block;
+  padding: 20px;
+  margin: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0, 0.5);
+}
+
+@media (min-width: 500px) and (max-width: 600px) {
+  .tile {
+    color: blue;
+    font-weight: bold;
+  }
+}
+
+@media (min-width: 700px) {
+  .tile {
+    width: calc(50% - 60px);
+  }
+}
+
+@media (min-width: 1100px) {
+  .tile {
+    width: calc((100% / 3) - 60px);
+  }
+}
+
+@media (min-width: 1400px) {
+  .tiles {
+    width: 1400px;
+    margin: 0 auto;
+  }
+}
