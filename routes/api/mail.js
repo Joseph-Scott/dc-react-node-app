@@ -21,13 +21,13 @@ transporter.use('compile', hbs({
 
 router.post('/', (req, res, next) => {
     transporter.sendMail({
-        from: '"Fred Foo 👻" <foo@example.com>', // sender address
-        to: 'test@something.com', // list of receivers
-        subject: 'Hello ✔', // Subject line
+        from: `"${req.body.fromName}" <${req.body.fromEmail}>`, // sender address
+        to: req.body.toEmail, // list of receivers
+        subject: `Hey ${req.body.toName}, check this out`, // Subject line
         text: 'Hello world?', // plain text body
         template: 'notification',
         context: {
-            name: req.body.name,
+            ...req.body
         }
     }, (error, info) => {
         if (error) {
